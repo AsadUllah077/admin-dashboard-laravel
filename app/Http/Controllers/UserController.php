@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Password;
 use PHPUnit\Event\Code\Throwable;
-
+use SweetAlert2\Laravel\Swal;
 class UserController extends Controller
 {
     public function index()
@@ -92,4 +92,4 @@ class UserController extends Controller
             return to_route('users');
         }
     }
-}
+}   

@@ -33,6 +33,11 @@
         }
         window.setAppearance(window.localStorage.getItem('appearance') || 'system')
     </script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -51,7 +56,7 @@
     },
     formSubmitted: false,
 }">
-
+{{-- @include('sweetalert2::index') --}}
     <!-- Main Container -->
     <div class="min-h-screen flex flex-col">
 
