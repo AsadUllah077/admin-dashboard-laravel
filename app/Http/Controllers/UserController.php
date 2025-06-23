@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreate;
 use App\Models\User;
+use Hoa\Event\Event;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -36,6 +38,7 @@ class UserController extends Controller
 
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
+        event(new UserCreate($user));
         toastr()->success('User Create Successfully!');
         return to_route('users');
     }
@@ -92,4 +95,4 @@ class UserController extends Controller
             return to_route('users');
         }
     }
-}   
+}

@@ -9,7 +9,11 @@
             + Add User
         </a>
     </div>
+@if(auth()->user()->is_admin ==1)
+<div id="show-msg">
 
+</div>
+@endif
     <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg p-4">
         <table id="users-table" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead class="bg-gray-100 dark:bg-gray-700">
@@ -36,16 +40,17 @@
                             </a>
 
                             <!-- Delete Icon -->
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-user-form">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="text-red-500 hover:text-red-700" title="Delete">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-    </button>
-</form>
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                class="delete-user-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </form>
 
 
                         </td>
@@ -55,29 +60,46 @@
             </tbody>
         </table>
     </div>
+    @section('ssript')
+    @if(auth()->user()->is_admin ==1)
+      <script type="module">
+    console.log("Echo loaded?", window.Echo);
+
+    Echo.channel("posts")
+        .listen(".create", (e) => {
+            console.log("Event received:", e);
+            const container = document.getElementById('show-msg');
+            if (container) {
+                container.innerHTML += `<p>${e.message}</p>`;
+            }
+        });
+</script>
+
+        @endif
+    @endsection
     <script>
-    $(document).ready(function () {
-        $(document).on('submit', '.delete-user-form', function (e) {
-            e.preventDefault(); // Stop form from submitting
+        $(document).ready(function() {
+            $(document).on('submit', '.delete-user-form', function(e) {
+                e.preventDefault(); // Stop form from submitting
 
-            const form = this;
+                const form = this;
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit(); // Now submit the form
-                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Now submit the form
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 
     @push('scripts')
         <!-- jQuery -->
